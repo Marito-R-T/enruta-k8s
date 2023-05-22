@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: route-service-app
+  labels:
+    app: route-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: route-service-app
+  template:
+    metadata:
+      labels:
+        app: route-service-app
+    spec:
+      containers:
+      - name: route-service-app
+        image: maritort/route-service:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8084
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  route-service-svc
+spec:
+  selector:
+    app:  route-service-app
+  ports:
+  - port:  80
+    targetPort:  8084

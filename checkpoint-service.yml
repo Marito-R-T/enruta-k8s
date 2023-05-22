@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkpoint-service-app
+  labels:
+    app: checkpoint-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkpoint-service-app
+  template:
+    metadata:
+      labels:
+        app: checkpoint-service-app
+    spec:
+      containers:
+      - name: checkpoint-service-app
+        image: maritort/checkpoint-service:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8087
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  checkpoint-service-svc
+spec:
+  selector:
+    app:  checkpoint-service-app
+  ports:
+  - port:  80
+    targetPort:  8087

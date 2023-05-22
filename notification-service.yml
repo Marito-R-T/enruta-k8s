@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service-app
+  labels:
+    app: notification-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service-app
+  template:
+    metadata:
+      labels:
+        app: notification-service-app
+    spec:
+      containers:
+      - name: notification-service-app
+        image: maritort/notification-service:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8082
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  notification-service-svc
+spec:
+  selector:
+    app:  notification-service-app
+  ports:
+  - port:  80
+    targetPort:  8082

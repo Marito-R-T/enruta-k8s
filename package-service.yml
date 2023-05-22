@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: package-service-app
+  labels:
+    app: package-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: package-service-app
+  template:
+    metadata:
+      labels:
+        app: package-service-app
+    spec:
+      containers:
+      - name: package-service-app
+        image: maritort/package-service:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8083
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  package-service-svc
+spec:
+  selector:
+    app:  package-service-app
+  ports:
+  - port:  80
+    targetPort:  8083
