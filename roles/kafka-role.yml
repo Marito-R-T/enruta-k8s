@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: kafka
+  name: kafka-access-role
+rules:
+- apiGroups: [""]  # Acceso a los recursos sin un grupo específico (core API group)
+  resources: ["services"]
+  verbs: ["get", "list"]
+- apiGroups: [""]  # Acceso a los recursos sin un grupo específico (core API group)
+  resources: ["endpoints"]
+  verbs: ["get"]
+- apiGroups: [""]  # Acceso a los recursos sin un grupo específico (core API group)
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: kafka
+  name: kafka-access-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kafka-access-role
+subjects:
+- kind: ServiceAccount
+  name: kafka-access-sa  # Cambiar al nombre de la cuenta de servicio en los otros namespaces que necesitan acceso
